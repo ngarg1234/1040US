@@ -1,7 +1,6 @@
 name: Trigger Deployment Workflow
 
 on:
-  workflow_dispatch: # Allows manual trigger from the Actions tab
   push:
     branches:
       - main           # Or any branch you want
