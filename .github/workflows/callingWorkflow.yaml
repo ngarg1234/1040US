@@ -1,0 +1,13 @@
+name: Trigger Deployment Workflow
+ 
+on:
+  push:
+    branches:
+      - main
+ 
+jobs:
+  call-deployment:
+    uses: ./testManualAutomaticTriggerEvents.yaml
+    with:
+      environment: production
+      version: v1.2.3
