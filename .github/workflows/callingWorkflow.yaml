@@ -7,7 +7,7 @@ on:
  
 jobs:
   call-deployment:
-    uses: ./.github/workflows/testManualAutomaticTriggerEvents.yaml
+    uses: ./.github/workflows/testManualplusAutomaticTriggerEvents.yaml
     with:
       environment: production
       version: v1.2.3
