@@ -9,7 +9,6 @@ on:
       version:
         required: true
         type: string
-  workflow_dispatch:
 
 jobs:
   debug-event:
@@ -19,16 +18,7 @@ jobs:
         run: echo "Event name is ${{ github.event_name }}"
 
   build-and-deploy:
-    if: github.event_name == 'workflow_call'
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        run: |
-          echo "Deploying to ${{ inputs.environment }} with version ${{ inputs.version }}"
-
-  manual-deploy:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Manual deploy
-        run: echo "Manually triggered deployment"
+        run: echo "Deploying to ${{ inputs.environment }} with version ${{ inputs.version }}"
