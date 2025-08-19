@@ -1,0 +1,51 @@
+name: Deployment Workflow
+ 
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      version:
+        required: false
+        type: string
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        type: string
+      version:
+        description: 'Version to deploy'
+        required: false
+        type: string
+ 
+jobs:
+  build-and-deploy:
+    if: github.event_name == 'workflow_call'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+ 
+      - name: Install dependencies
+        run: echo "Installing dependencies..."
+ 
+      - name: Run tests
+        run: echo "Running tests..."
+ 
+      - name: Build project
+        run: echo "Building project..."
+ 
+      - name: Deploy
+        run: echo "Deploying to ${{ inputs.environment }} with version ${{ inputs.version }}"
+ 
+  manual-deploy:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+ 
+      - name: Deploy
+        run: echo "Manually deploying to ${{ inputs.environment }} with version ${{ inputs.version }}"
