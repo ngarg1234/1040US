@@ -21,6 +21,11 @@ on:
         type: string
 
 jobs:
+  debug-event:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print event name
+        run: echo "Event name is ${{ github.event_name }}"
   build-and-deploy:
     if: github.event_name == 'workflow_call'
     runs-on: ubuntu-latest
