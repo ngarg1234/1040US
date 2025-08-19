@@ -7,7 +7,7 @@ on:
 
 jobs:
   call-deployment:
-    uses: ./.github/workflows/deployment-workflow.yaml
+    uses: ./.github/workflows/deployment-workflows.yaml
     with:
       environment: production
       version: v1.2.3
