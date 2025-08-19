@@ -25,8 +25,6 @@ jobs:
     if: github.event_name == 'workflow_call'
     runs-on: ubuntu-latest
     steps:
-      - name: Print event name
-        run: echo "Event name: ${{ github.event_name }}"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Install dependencies
@@ -42,8 +40,6 @@ jobs:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
-      - name: Print event name
-        run: echo "Event name: ${{ github.event_name }}"
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Deploy
