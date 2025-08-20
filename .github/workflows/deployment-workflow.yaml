@@ -86,7 +86,7 @@ jobs:
 
           else
 
-            exit 1
+            echo "version=auto-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
           fi
  
