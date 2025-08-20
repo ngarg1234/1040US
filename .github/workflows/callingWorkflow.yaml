@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-jobs:
+jobs
   call-deployment:
     uses: ./.github/workflows/deployment-workflow.yaml
     with:
