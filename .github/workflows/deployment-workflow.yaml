@@ -105,6 +105,8 @@ jobs:
           echo "Building project..."
 
           echo "Build completed successfully"
+
+          exit 1
  
   # ✅ Deploy job - runs always but checks build success when needed
 
