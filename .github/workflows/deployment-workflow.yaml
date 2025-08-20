@@ -80,13 +80,13 @@ jobs:
 
         run: |
 
-          if [ "${{ inputs.vern }}" != "" ]; then
+          if [ "${{ inputs.version }}" != "" ]; then
 
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
 
           else
 
-            echo "version=auto-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+            exit 1
 
           fi
  
