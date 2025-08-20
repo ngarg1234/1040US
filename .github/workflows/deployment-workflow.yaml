@@ -80,7 +80,7 @@ jobs:
 
         run: |
 
-          if [ "${{ inputs.version }}" != "" ]; then
+          if [ "${{ inputs.vern }}" != "" ]; then
 
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
 
