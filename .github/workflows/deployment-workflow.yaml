@@ -38,13 +38,13 @@ on:
 
         type: string
  
-  pull_request:
+  #pull_request:
 
-    branches: [ main, develop ]
+   # branches: [ main, develop ]
 
-  push:
+  #push:
 
-    branches: [ main, develop ]
+   # branches: [ main, develop ]
 
 jobs:
 
