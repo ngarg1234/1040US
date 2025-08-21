@@ -19,8 +19,8 @@ on:
       deployYear:
         description: Year (YY) of deployment
         required: false
-        type: number
-        default: 24
+        type: string
+        default: '24'
       deployConfiguration:
         description: Configuration to deploy
         required: false
