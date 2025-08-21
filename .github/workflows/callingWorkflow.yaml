@@ -40,7 +40,7 @@ jobs:
   call-build:
     needs: redirect
     if: needs.redirect.outputs.event_name != 'workflow_dispatch'
-    uses: ngarg1234/CICD/.github/workflows/build.yaml@master
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
@@ -50,7 +50,7 @@ jobs:
   call-deploy:
     needs: redirect
     if: needs.redirect.outputs.event_name == 'workflow_dispatch'
-    uses: ngarg1234/CICD/.github/workflows/deploy.yaml@master
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
