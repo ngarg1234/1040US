@@ -1,4 +1,3 @@
-# .github/workflows/redirect.yml
 name: Redirect Workflow 
 on:
   push:
@@ -25,30 +24,18 @@ on:
         required: false
         type: string
         default: optional
- 
+
 jobs:
-  redirect:
-    runs-on: ubuntu-latest
-    outputs:
-      event_name: ${{ steps.trigger-check.outputs.event_name }}
-    steps:
-      - name: Determine Trigger
-        id: trigger-check
-        run: echo "event_name=${{ github.event_name }}" >> $GITHUB_OUTPUT
- 
   call-build:
-    needs: redirect
-    if: needs.redirect.outputs.event_name != 'workflow_dispatch'
+    if: github.event_name != 'workflow_dispatch'
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
       deployConfiguration: ${{ inputs.deployConfiguration }}
       deployTarget: ${{ inputs.deployTarget }}
- 
+
   call-deploy:
-    needs: redirect
-    if: needs.redirect.outputs.event_name == 'workflow_dispatch'
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
