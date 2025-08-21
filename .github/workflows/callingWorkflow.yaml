@@ -1,5 +1,6 @@
 # .github/workflows/redirect.yml
 name: Redirect Workflow
+
 on:
   push:
   pull_request:
