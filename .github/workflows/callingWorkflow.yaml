@@ -36,6 +36,7 @@ jobs:
       deployTarget: ${{ inputs.deployTarget }}
 
   call-deploy:
+    if: github.event_name == 'workflow_dispatch'
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
