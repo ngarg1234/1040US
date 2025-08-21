@@ -1,13 +1,63 @@
-name: Trigger Deployment Workflow
-
+# .github/workflows/redirect.yml
+name: Redirect Workflow
+ 
 on:
   push:
-    branches:
-      - main
-
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      productName:
+        description: PFW name of the product (UTPlatform, 1040US, 1120CA, etc.)
+        required: false
+        type: string
+        default: ""
+      deployVersion:
+        description: Version to deploy (e.g. 24.3.2 or 24,0,1,#0000000SCTJHH)
+        required: false
+        type: string
+        default: latest
+      deployYear:
+        description: Year (YY) of deployment
+        required: false
+        type: string
+        default: '24'
+      deployConfiguration:
+        description: Configuration to deploy
+        required: false
+        type: string
+        default: release
+      deployTarget:
+        description: Deployment targets (comma separated values FTest, STest, DevTest)
+        required: false
+        type: string
+        default: optional
+ 
 jobs:
-  call-deployment:
-    uses: ./.github/workflows/deployment-workflow.yaml
+  redirect:
+    runs-on: ubuntu-latest
+    outputs:
+      event_name: ${{ steps.trigger-check.outputs.event_name }}
+    steps:
+      - name: Determine Trigger
+        id: trigger-check
+        run: echo "event_name=${{ github.event_name }}" >> $GITHUB_OUTPUT
+ 
+  call-build:
+    if: needs.redirect.outputs.event_name != 'workflow_dispatch'
+    uses: ngarg/CICD/.github/workflows/build.yml@main
     with:
-      environment: production
-      version: v1.2.3
+      productName: ${{ inputs.productName }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployYear: ${{ inputs.deployYear }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
+ 
+  call-deploy:
+    if: needs.redirect.outputs.event_name == 'workflow_dispatch'
+    uses: ngarg/CICD/.github/workflows/deploy.yml@main
+    with:
+      productName: ${{ inputs.productName }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployYear: ${{ inputs.deployYear }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
