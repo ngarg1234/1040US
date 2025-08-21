@@ -44,7 +44,7 @@ jobs:
  
   call-build:
     if: needs.redirect.outputs.event_name != 'workflow_dispatch'
-    uses: ngarg/CICD/.github/workflows/build.yml@main
+    uses: ngarg1234/CICD/.github/workflows/build.yml@main
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
@@ -54,7 +54,7 @@ jobs:
  
   call-deploy:
     if: needs.redirect.outputs.event_name == 'workflow_dispatch'
-    uses: ngarg/CICD/.github/workflows/deploy.yml@main
+    uses: ngarg1234/CICD/.github/workflows/deploy.yml@main
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
