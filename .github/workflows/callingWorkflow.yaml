@@ -44,7 +44,7 @@ jobs:
       deployVersion: ${{ inputs.deployVersion }}
       deployConfiguration: ${{ inputs.deployConfiguration }}
       deployTarget: ${{ inputs.deployTarget }}
-      deployAfterBuild: ${{ inputs.runMode == 'build-and-deploy' }}
+      deployAfterBuild: ${{ github.event_name != 'workflow_dispatch' || inputs.runMode == 'build-and-deploy' }}
 
   call-deploy:
     if: github.event_name == 'workflow_dispatch' && inputs.runMode == 'deploy'
