@@ -1,4 +1,5 @@
-name: Redirect Workflow 
+name: Redirect Workflow
+
 on:
   push:
   pull_request:
@@ -24,10 +25,19 @@ on:
         required: false
         type: string
         default: optional
+      runMode:
+        description: What action to perform (build, deploy, or build-and-deploy)
+        required: false
+        default: build-and-deploy
+        type: choice
+        options:
+          - build
+          - deploy
+          - build-and-deploy
 
 jobs:
   call-build:
-    if: github.event_name != 'workflow_dispatch'
+    if: github.event_name != 'workflow_dispatch' || inputs.runMode == 'build' || inputs.runMode == 'build-and-deploy'
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
       productName: ${{ inputs.productName }}
@@ -36,7 +46,7 @@ jobs:
       deployTarget: ${{ inputs.deployTarget }}
 
   call-deploy:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && (inputs.runMode == 'deploy' || inputs.runMode == 'build-and-deploy')
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
