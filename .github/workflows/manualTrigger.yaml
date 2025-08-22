@@ -4,48 +4,37 @@ on:
   workflow_dispatch:
     inputs:
       runMode:
-        description: Select what to do
+        description: |
+        What to do:
+        - build: Run build only
+        - deploy: Run deploy only
+        - build-and-deploy: Do both
         required: true
         type: choice
-        default: build-and-deploy
-        options:
-          - build
-          - deploy
-          - build-and-deploy
-
+        options: [build, deploy, build-and-deploy]
+      
       # 🔧 Build-only inputs
-      productName:
-        description: Product name (build)
-        required: false
+      build_productName:
+        description: (Build only) Product name
         type: string
-        default: ""
+        required: false
+      
       buildType:
-        description: Build type (full/incremental)
-        required: false
+        description: (Build only) Build type (e.g. full/incremental)
         type: string
+        required: false
         default: full
-      skipTests:
-        description: Skip tests during build?
-        required: false
-        type: boolean
-        default: false
-
+      
       # 🚀 Deploy-only inputs
+      deploy_productName:
+        description: (Deploy only) Product name
+        type: string
+        required: false
+        
       deployVersion:
-        description: Version to deploy
-        required: false
+        description: (Deploy only) Version to deploy
         type: string
-        default: latest
-      deployConfiguration:
-        description: Deploy configuration (release/debug)
         required: false
-        type: string
-        default: release
-      deployTarget:
-        description: Deploy targets (comma-separated)
-        required: false
-        type: string
-        default: optional
 
 jobs:
   manual-build:
