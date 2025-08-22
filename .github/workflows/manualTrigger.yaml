@@ -5,40 +5,53 @@ on:
     inputs:
       runMode:
         description: |
-        What to do:
-        - build: Run build only
-        - deploy: Run deploy only
-        - build-and-deploy: Do both
+          What to do:
+          - build: Run build only
+          - deploy: Run deploy only
+          - build-and-deploy: Do both
         required: true
         type: choice
         options: [build, deploy, build-and-deploy]
-      
+
       # 🔧 Build-only inputs
-      build_productName:
+      productName:
         description: (Build only) Product name
         type: string
         required: false
-      
+
       buildType:
         description: (Build only) Build type (e.g. full/incremental)
         type: string
         required: false
         default: full
-      
-      # 🚀 Deploy-only inputs
-      deploy_productName:
-        description: (Deploy only) Product name
-        type: string
+
+      skipTests:
+        description: (Build only) Skip tests
+        type: boolean
         required: false
-        
+        default: false
+
+      # 🚀 Deploy-only inputs
       deployVersion:
         description: (Deploy only) Version to deploy
         type: string
         required: false
 
+      deployConfiguration:
+        description: (Deploy only) Configuration to deploy
+        type: string
+        required: false
+        default: release
+
+      deployTarget:
+        description: (Deploy only) Deployment targets (comma separated)
+        type: string
+        required: false
+        default: optional
+
 jobs:
   manual-build:
-    if: inputs.runMode == 'build' || inputs.runMode == 'build-and-deploy'
+    if: ${{ inputs.runMode == 'build' || inputs.runMode == 'build-and-deploy' }}
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
       productName: ${{ inputs.productName }}
@@ -50,7 +63,7 @@ jobs:
       deployTarget: ${{ inputs.deployTarget }}
 
   manual-deploy:
-    if: inputs.runMode == 'deploy'
+    if: ${{ inputs.runMode == 'deploy' }}
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
