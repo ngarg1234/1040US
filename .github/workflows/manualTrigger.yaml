@@ -1,0 +1,70 @@
+name: Manual Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      runMode:
+        description: Select what to do
+        required: true
+        type: choice
+        default: build-and-deploy
+        options:
+          - build
+          - deploy
+          - build-and-deploy
+
+      # 🔧 Build-only inputs
+      productName:
+        description: Product name (build)
+        required: false
+        type: string
+        default: ""
+      buildType:
+        description: Build type (full/incremental)
+        required: false
+        type: string
+        default: full
+      skipTests:
+        description: Skip tests during build?
+        required: false
+        type: boolean
+        default: false
+
+      # 🚀 Deploy-only inputs
+      deployVersion:
+        description: Version to deploy
+        required: false
+        type: string
+        default: latest
+      deployConfiguration:
+        description: Deploy configuration (release/debug)
+        required: false
+        type: string
+        default: release
+      deployTarget:
+        description: Deploy targets (comma-separated)
+        required: false
+        type: string
+        default: optional
+
+jobs:
+  manual-build:
+    if: inputs.runMode == 'build' || inputs.runMode == 'build-and-deploy'
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
+    with:
+      productName: ${{ inputs.productName }}
+      buildType: ${{ inputs.buildType }}
+      skipTests: ${{ inputs.skipTests }}
+      deployAfterBuild: ${{ inputs.runMode == 'build-and-deploy' }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
+
+  manual-deploy:
+    if: inputs.runMode == 'deploy'
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
+    with:
+      productName: ${{ inputs.productName }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
