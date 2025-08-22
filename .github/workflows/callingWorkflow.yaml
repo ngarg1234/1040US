@@ -47,7 +47,7 @@ jobs:
       deployAfterBuild: ${{ inputs.runMode == 'build-and-deploy' }}
 
   call-deploy:
-    if: github.event_name == 'workflow_dispatch' && (inputs.runMode == 'deploy' || inputs.runMode == 'build-and-deploy')
+    if: github.event_name == 'workflow_dispatch' && inputs.runMode == 'deploy'
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
