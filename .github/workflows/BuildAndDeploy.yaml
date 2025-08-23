@@ -71,7 +71,7 @@ jobs:
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
 
   deploy:
-    if: github.event_name != 'workflow_dispatch' || (github.event.inputs && github.event.inputs.VALIDATE_ONLY == 'false')
+    if: github.event_name == 'workflow_dispatch' || (github.event.inputs && github.event.inputs.VALIDATE_ONLY == 'false')
     needs: build
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
