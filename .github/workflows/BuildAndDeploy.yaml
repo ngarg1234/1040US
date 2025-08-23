@@ -66,7 +66,7 @@ jobs:
           echo "Skip tests: ${{ inputs.skipTests }}"
 
   deploy:
-    if: ${{ inputs.VALIDATE_ONLY == false }}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.VALIDATE_ONLY == 'false' }}
     needs: build
     uses: ./.github/workflows/release.yaml
     with:
