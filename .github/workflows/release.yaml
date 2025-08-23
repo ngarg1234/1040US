@@ -1,0 +1,51 @@
+name: Release Workflow
+
+on:
+  workflow_call:
+    inputs:
+      productName:
+        required: true
+        type: string
+      deployVersion:
+        required: true
+        type: string
+      deployConfiguration:
+        required: false
+        type: string
+        default: release
+      deployTarget:
+        required: false
+        type: string
+        default: DevTest
+
+  workflow_dispatch:
+    inputs:
+      productName:
+        description: Product to deploy
+        required: true
+        type: string
+      deployVersion:
+        description: Version to deploy
+        required: true
+        type: string
+      deployConfiguration:
+        description: Configuration to deploy
+        required: false
+        type: string
+        default: release
+      deployTarget:
+        description: Target environments (comma-separated)
+        required: false
+        type: string
+        default: DevTest
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          echo "Deploying ${{ inputs.productName }}"
+          echo "Version: ${{ inputs.deployVersion }}"
+          echo "Configuration: ${{ inputs.deployConfiguration }}"
+          echo "Targets: ${{ inputs.deployTarget }}"
