@@ -54,21 +54,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Build project
-        run: |
-          echo "Building ${{ inputs.productName }}"
-          echo "Build type: ${{ inputs.buildType }}"
-          echo "Skip tests: ${{ inputs.skipTests }}"
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
+    with:
+      productName: ${{ inputs.productName }}
+      buildType: ${{ inputs.buildType }}
+      skipTests: ${{ inputs.skipTests }}
+      deployAfterBuild: ${{ inputs.runMode == 'build-and-deploy' }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
 
   deploy:
     if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.VALIDATE_ONLY == 'false' }}
     needs: build
-    uses: ./.github/workflows/release.yaml
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       productName: ${{ inputs.productName }}
       deployVersion: ${{ inputs.deployVersion }}
