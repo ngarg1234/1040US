@@ -10,20 +10,37 @@ on:
         required: false
         type: boolean
         default: true
-      productName:
-        description: Product to build/deploy
+      CONFIGURATION:
+        description: Configuration to build.
         required: true
         type: string
-      buildType:
-        description: Build type (full/incremental)
+      BUILD_NUMBER:
+        description: Build number to use.
+        required: true
+        type: string
+      PLATFORM:
+        description: Platform to build for.
         required: false
         type: string
-        default: full
-      skipTests:
-        description: Skip unit tests
+        default: Win32
+      SKIP_INVALID_CONFIGURATIONS:
+        description: Skip invalid configurations.
         required: false
         type: boolean
-        default: false
+        default: true
+      COPY_UT_PLATFORM_BINARIES:
+        description: Copy UT platform binaries.
+        required: false
+        type: boolean
+        default: true
+      NUGET_CONFIG_FILE:
+        description: Path to the NuGet configuration file relative to the repository root.
+        type: string
+        default: src/NuGet.config
+      REQUIRED_GIT_REPOS_FILE:
+        description: Path to the required git repositories file relative to the repository root.
+        type: string
+        default: required-git-repos.json
       deployVersion:
         description: Version to deploy
         required: false
