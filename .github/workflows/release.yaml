@@ -41,11 +41,9 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        run: |
-          echo "Deploying ${{ inputs.productName }}"
-          echo "Version: ${{ inputs.deployVersion }}"
-          echo "Configuration: ${{ inputs.deployConfiguration }}"
-          echo "Targets: ${{ inputs.deployTarget }}"
+    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
+    with:
+      productName: ${{ inputs.productName }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
