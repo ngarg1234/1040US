@@ -1,0 +1,64 @@
+name: Build and Deploy
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      VALIDATE_ONLY:
+        description: Only build and validate, do not deploy
+        required: false
+        type: boolean
+        default: true
+      productName:
+        description: Product to build/deploy
+        required: true
+        type: string
+      buildType:
+        description: Build type (full/incremental)
+        required: false
+        type: string
+        default: full
+      skipTests:
+        description: Skip unit tests
+        required: false
+        type: boolean
+        default: false
+      deployVersion:
+        description: Version to deploy
+        required: false
+        type: string
+        default: latest
+      deployConfiguration:
+        description: Configuration to deploy
+        required: false
+        type: string
+        default: release
+      deployTarget:
+        description: Deployment targets (comma-separated)
+        required: false
+        type: string
+        default: DevTest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build project
+        run: |
+          echo "Building ${{ inputs.productName }}"
+          echo "Build type: ${{ inputs.buildType }}"
+          echo "Skip tests: ${{ inputs.skipTests }}"
+
+  deploy:
+    if: ${{ inputs.VALIDATE_ONLY == false }}
+    needs: build
+    uses: ./.github/workflows/release.yaml
+    with:
+      productName: ${{ inputs.productName }}
+      deployVersion: ${{ inputs.deployVersion }}
+      deployConfiguration: ${{ inputs.deployConfiguration }}
+      deployTarget: ${{ inputs.deployTarget }}
