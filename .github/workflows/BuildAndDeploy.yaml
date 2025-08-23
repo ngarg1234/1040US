@@ -46,11 +46,6 @@ on:
         required: false
         type: string
         default: latest
-      deployConfiguration:
-        description: Configuration to deploy
-        required: false
-        type: string
-        default: release
       deployTarget:
         description: Deployment targets (comma-separated)
         required: false
