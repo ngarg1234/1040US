@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       VALIDATE_ONLY:
-        description: Only build, do not deploy
+        description: VALIDATE_ONLY
         required: false
         default: true
         type: boolean
