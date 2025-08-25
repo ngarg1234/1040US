@@ -67,13 +67,18 @@ jobs:
   build:
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
-      buildType: ${{ github.event.inputs.buildType }}
+      buildType: ${{ github.event.inputs.buildType || 'full' }}
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
+    # Always run build on any trigger
+    # No condition needed unless you want to exclude deploy-only manual runs
 
   deploy:
-    if: github.event_name == 'workflow_dispatch' || (github.event.inputs && github.event.inputs.VALIDATE_ONLY == 'false')
+    # Run deploy only if:
+    # - It’s NOT a workflow_dispatch (e.g., push/pull_request), OR
+    # - VALIDATE_ONLY is explicitly false (manual run)
+    if: github.event_name != 'workflow_dispatch' || github.event.inputs.VALIDATE_ONLY == 'false'
     needs: build
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
-      deployVersion: ${{ github.event.inputs.deployVersion }}
-      deployTarget: ${{ github.event.inputs.deployTarget }}
+      deployVersion: ${{ github.event.inputs.deployVersion || 'latest' }}
+      deployTarget: ${{ github.event.inputs.deployTarget || 'DevTest' }}
