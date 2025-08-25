@@ -17,12 +17,11 @@ on:
         description: Version to deploy
         required: true
         type: string
-
       deployTarget:
-        description: Target environments (comma-separated)
+        description: Deploy target(s)
         required: false
-        type: string
         default: DevTest
+        type: string
 
 jobs:
   deploy:
