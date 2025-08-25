@@ -6,39 +6,25 @@ on:
   workflow_dispatch:
     inputs:
       VALIDATE_ONLY:
-        description: Make it true, if only build is required
+        description: Only build, do not deploy
         required: false
-        type: boolean
         default: true
-
+        type: boolean
       CONFIGURATION:
-        description: Configuration to build.
+        description: Build configuration
         required: true
+        default: release
         type: string
-
-      NUGET_CONFIG_FILE:
-        description: Path to the NuGet configuration file relative to the repository root.
-        required: false
-        type: string
-        default: src/NuGet.config
-
-      REQUIRED_GIT_REPOS_FILE:
-        description: Path to the required git repositories file relative to the repository root.
-        required: false
-        type: string
-        default: required-git-repos.json
-
       deployVersion:
         description: Version to deploy
         required: false
-        type: string
         default: latest
-
-      deployTarget:
-        description: Deployment targets (comma-separated)
-        required: false
         type: string
+      deployTarget:
+        description: Deploy target(s)
+        required: false
         default: DevTest
+        type: string
 
 jobs:
   build:
@@ -46,15 +32,10 @@ jobs:
     with:
       buildType: ${{ github.event.inputs.buildType || 'full' }}
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
-    # Always run build on any trigger
-    # No condition needed unless you want to exclude deploy-only manual runs
 
   deploy:
-    # Run deploy only if:
-    # - It’s NOT a workflow_dispatch (e.g., push/pull_request), OR
-    # - VALIDATE_ONLY is explicitly false (manual run)
-    if: github.event_name != 'workflow_dispatch' || github.event.inputs.VALIDATE_ONLY == 'false'
     needs: build
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.VALIDATE_ONLY == 'false' }}
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
       deployVersion: ${{ github.event.inputs.deployVersion || 'latest' }}
