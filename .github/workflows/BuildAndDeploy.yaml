@@ -40,11 +40,3 @@ jobs:
       VALIDATE_ONLY: ${{ github.event.inputs.VALIDATE_ONLY == 'true' }}
       deployVersion: ${{ github.event.inputs.deployVersion }}
       deployTarget: ${{ github.event.inputs.deployTarget }}
-
-  deploy:
-    needs: build
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.VALIDATE_ONLY == 'false' }}
-    uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
-    with:
-      deployVersion: ${{ github.event.inputs.deployVersion }}
-      deployTarget: ${{ github.event.inputs.deployTarget }}
