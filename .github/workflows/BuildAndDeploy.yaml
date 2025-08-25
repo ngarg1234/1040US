@@ -30,14 +30,13 @@ jobs:
   build:
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/build.yaml@master
     with:
-      buildType: ${{ github.event.inputs.buildType || 'full' }}
+      buildType: ${{ github.event.inputs.buildType }}
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
-      VALIDATE_ONLY: ${{ github.event.inputs.VALIDATE_ONLY }}
-      
+      VALIDATE_ONLY: ${{ github.event.inputs.VALIDATE_ONLY }}      
   deploy:
     needs: build
     if: ${{ inputs.VALIDATE_ONLY == 'false' }}
     uses: ngarg1234/cs-prof-common-utilities/.github/workflows/deploy.yaml@master
     with:
-      deployVersion: ${{ github.event.inputs.deployVersion || 'latest' }}
-      deployTarget: ${{ github.event.inputs.deployTarget || 'DevTest' }}
+      deployVersion: ${{ github.event.inputs.deployVersion }}
+      deployTarget: ${{ github.event.inputs.deployTarget }}
