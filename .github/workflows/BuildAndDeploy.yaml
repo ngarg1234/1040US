@@ -33,6 +33,7 @@ jobs:
       buildType: ${{ github.event.inputs.buildType || 'full' }}
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
       VALIDATE_ONLY: ${{ github.event.inputs.VALIDATE_ONLY }}
+      
   deploy:
     needs: build
     if: ${{ inputs.VALIDATE_ONLY == 'false' }}
