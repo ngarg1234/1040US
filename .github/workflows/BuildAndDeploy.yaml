@@ -38,5 +38,6 @@ jobs:
       buildType: ${{ github.event.inputs.buildType }}
       CONFIGURATION: ${{ github.event.inputs.CONFIGURATION }}
       VALIDATE_ONLY: ${{ github.event.inputs.VALIDATE_ONLY == 'true' }}
+    
       deployVersion: ${{ github.event.inputs.deployVersion }}
       deployTarget: ${{ github.event.inputs.deployTarget }}
