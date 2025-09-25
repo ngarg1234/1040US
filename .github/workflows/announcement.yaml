@@ -1,0 +1,48 @@
+name: Build Paths
+
+on:
+  workflow_dispatch:
+    inputs:
+      packageVersion:
+        description: 'Package version (e.g., 25, 25.0, 25.0.9, 25.0.9.#00000KJKL)'
+        required: true
+
+jobs:
+  build-paths:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Build Artifact Path
+        shell: pwsh
+        run: |
+          # Get inputs
+          $packageVersion = "${{ github.event.inputs.packageVersion }}"
+
+          # Extract YY (first number before dot or extra chars)
+          $yy = $packageVersion.Split('.')[0]
+
+          # triggeringDefinitionName = repo name
+          $triggeringDefinitionName = "${{ github.repository }}".Split('/')[1]
+
+          # Build paths
+          $artifactPath = "generic-local/CSTax/20$yy/MAIN/$triggeringDefinitionName"
+          $LibRootPath  = "20$yy/MAIN"
+          $repo         = $artifactPath.Split("/")[0]
+          $path         = "CSTax/$LibRootPath/$triggeringDefinitionName"
+
+          Write-Output "Package Version: $packageVersion"
+          Write-Output "Year (YY): $yy"
+          Write-Output "Repo Name (triggeringDefinitionName): $triggeringDefinitionName"
+          Write-Output "Artifact Path: $artifactPath"
+          Write-Output "LibRootPath: $LibRootPath"
+          Write-Output "Repo: $repo"
+          Write-Output "Path: $path"
+
+          # Export as environment variables if needed for later steps
+          echo "ARTIFACT_PATH=$artifactPath" >> $env:GITHUB_ENV
+          echo "LIBROOT_PATH=$LibRootPath" >> $env:GITHUB_ENV
+          echo "REPO=$repo" >> $env:GITHUB_ENV
+          echo "PATH_VAL=$path" >> $env:GITHUB_ENV
