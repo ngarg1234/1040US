@@ -25,7 +25,8 @@ jobs:
           $yy = $packageVersion.Split('.')[0]
 
           # triggeringDefinitionName = repo name
-          $triggeringDefinitionName = "${{ github.repository }}".Split('/')[1]
+          $repoName = (("${{ github.repository }}").Split('/') | Select-Object -Last 1)
+          $triggeringDefinitionName = $repoName.Split('-')[-1].ToUpper()
 
           # Build paths
           $artifactPath = "generic-local/CSTax/20$yy/MAIN/$triggeringDefinitionName"
