@@ -13,21 +13,38 @@ jobs:
           echo "WF2 github.actor = ${{ github.actor }}"
           echo "WF2 event = ${{ github.event_name }}"
 
-      - name: Trigger Master Product List Update (Workflow 3)
+      - name: Trigger Master Product List Update (Workflow 3) safely
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ACTOR: ${{ github.actor }}
         run: |
           echo "Passing ACTOR to WF3: $ACTOR"
       
+          # 1️⃣ Get workflow ID for masterproductlist-update.yaml
+          WORKFLOW_ID=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows \
+            | jq -r '.workflows[] | select(.path==".github/workflows/masterproductlist-update.yaml") | .id')
+      
+          if [ -z "$WORKFLOW_ID" ] || [ "$WORKFLOW_ID" = "null" ]; then
+            echo "ERROR: Could not find workflow ID for masterproductlist-update.yaml"
+            exit 1
+          fi
+      
+          echo "Found workflow ID: $WORKFLOW_ID — dispatching WF3..."
+      
+          # 2️⃣ Dispatch WF3 using workflow ID
           curl -sS -X POST \
             -H "Authorization: Bearer $GITHUB_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/masterproductlist-update.yaml/dispatches \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/dispatches \
             -d "{
               \"ref\": \"testActor\",
               \"inputs\": {
                 \"pr_actor\": \"$ACTOR\"
               }
             }"
-
+      
+          echo "WF3 dispatched successfully."
+      
+      
