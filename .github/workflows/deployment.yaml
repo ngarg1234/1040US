@@ -2,17 +2,7 @@ name: Deployment
 
 on:
   workflow_call:
-    inputs:
-      pr_actor:
-        required: false
-        type: string
-
   workflow_dispatch:
-    inputs:
-      pr_actor:
-        description: "Original PR Merger"
-        required: true
-        type: string
 
 jobs:
   deploy:
