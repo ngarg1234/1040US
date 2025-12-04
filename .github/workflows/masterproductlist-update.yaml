@@ -1,0 +1,25 @@
+name: Master Product List Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_actor:
+        description: "Original PR Merger"
+        required: true
+        type: string
+
+jobs:
+  update-master-list:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ DEBUG — Verify Actor Drop & Recovery
+        run: |
+          echo "WF3 github.actor (WILL BE BOT) = ${{ github.actor }}"
+          echo "WF3 inputs.pr_actor (REAL USER) = ${{ inputs.pr_actor }}"
+          echo "WF3 event = ${{ github.event_name }}"
+
+      - name: ✅ Secure Execution Using Real Actor
+        if: ${{ inputs.pr_actor != '' }}
+        run: |
+          echo "✅ Running master list update for REAL USER: ${{ inputs.pr_actor }}"
