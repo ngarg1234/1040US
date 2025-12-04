@@ -2,6 +2,11 @@ name: Deployment
 
 on:
   workflow_call:
+    inputs:
+      pr_actor:
+        required: false
+        type: string
+
   workflow_dispatch:
     inputs:
       pr_actor:
@@ -17,40 +22,40 @@ jobs:
       - name: ✅ DEBUG — Capture Real Actor in WF2
         run: |
           echo "WF2 github.actor = ${{ github.actor }}"
+          echo "WF2 inputs.pr_actor = ${{ inputs.pr_actor }}"
           echo "WF2 event = ${{ github.event_name }}"
 
-      - name: Trigger Master Product List Update (Workflow 3) safely
+      - name: Trigger Master Product List Update (Workflow 3)
         env:
-          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
-          ACTOR: ${{ github.actor }}
+          CROSS_REPO_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+          ACTOR: ${{ inputs.pr_actor || github.actor }}
         run: |
           echo "Passing ACTOR to WF3: $ACTOR"
-      
-          # 1️⃣ Get workflow ID for masterproductlist-update.yaml
-          WORKFLOW_ID=$(curl -s -H "Authorization: token $CROSS_REPO_TOKEN" \
+          echo "Fetching workflow ID from ngarg1234/1040US..."
+
+          WORKFLOW_ID=$(curl -s \
+            -H "Authorization: token $CROSS_REPO_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows \
+            https://api.github.com/repos/ngarg1234/1040US/actions/workflows \
             | jq -r '.workflows[] | select(.path==".github/workflows/masterproductlist-update.yaml") | .id')
-      
+
           if [ -z "$WORKFLOW_ID" ] || [ "$WORKFLOW_ID" = "null" ]; then
-            echo "ERROR: Could not find workflow ID for masterproductlist-update.yaml"
+            echo "❌ ERROR: Could not find workflow ID for masterproductlist-update.yaml in 1040US"
             exit 1
           fi
-      
-          echo "Found workflow ID: $WORKFLOW_ID — dispatching WF3..."
-      
-          # 2️⃣ Dispatch WF3 using workflow ID
+
+          echo "✅ Found workflow ID: $WORKFLOW_ID"
+          echo "Dispatching WF3..."
+
           curl -sS -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Authorization: token $CROSS_REPO_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/$WORKFLOW_ID/dispatches \
+            https://api.github.com/repos/ngarg1234/1040US/actions/workflows/$WORKFLOW_ID/dispatches \
             -d "{
               \"ref\": \"testActor\",
               \"inputs\": {
                 \"pr_actor\": \"$ACTOR\"
               }
             }"
-      
-          echo "WF3 dispatched successfully."
-      
-      
+
+          echo "✅ WF3 dispatched successfully."
