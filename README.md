@@ -12,5 +12,5 @@ Manual: Deploy only	✅	Through Release Pipeline
 
 Push/PR: Build + Deploy	✅..
 
-Test Actor:: ,, :: ))
+Test Actor::,, ::))
 
