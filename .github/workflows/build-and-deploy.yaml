@@ -1,0 +1,10 @@
+name: Build and Deploy
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  build-and-deploy:
+    if: github.event.pull_request.merged == true
+    uses: ./.github/workflows/deployment.yaml
